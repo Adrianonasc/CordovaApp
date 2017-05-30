@@ -67,12 +67,13 @@ const DIMENSAO = {
 }
 
 function multMatriz() {
-
+    document.getElementById("lblText").innerHTML = 'Teste 3 em execução'
     for (var i in DIMENSAO.LEN) {
         MultiplicarMatriz(DIMENSAO.LEN[i]);
         arrTempoExe.push(TEMPO_FIM - TEMPO_INICIO);
         console.log("Tempo Execução :", (TEMPO_FIM - TEMPO_INICIO), " milliseconds");
     }
+    document.getElementById("lblText").innerHTML = 'Teste Finalizado'
 }
 
 function MultiplicarMatriz(dimensao) {
