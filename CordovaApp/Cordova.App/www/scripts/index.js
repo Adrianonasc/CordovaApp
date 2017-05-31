@@ -36,7 +36,11 @@ function insertdbLocal() {
 }
 
 function webService() {
-    console.log("!2");
+    var URI = "http://webapiadrtcc.azurewebsites.net/api/Usuarios";
+
+
+
+
 }
 
 var queryInsert = "INSERT INTO Usuario(UsuarioId, Nome, Idade, Foto, Salario, Ativo) VALUES (?,?,?,?,?,?);";
