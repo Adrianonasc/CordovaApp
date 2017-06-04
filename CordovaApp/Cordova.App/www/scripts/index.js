@@ -21,12 +21,15 @@ var indexQuantidadeRegisto = 0;
 })();
 
 function insertdbLocal() {
-	if (indexQuantidadeRegisto >= arrQuantRegistro.length) indexQuantidadeRegisto = 0;
+	if (indexQuantidadeRegisto >= arrQuantRegistro.length) {
+		indexQuantidadeRegisto = 0;
+		arrTempoExecucao = new Array();
+	}
 
 	dropTable();
 	createTable();
 	var i = indexQuantidadeRegisto;
-	TEMPO_INICIO = performance.now();
+	TEMPO_INICIO = Date.now();
 	var usuario;
 	var usuarios = [];
 	for (var j = 1; j <= arrQuantRegistro[i]; j++) {
@@ -43,14 +46,17 @@ function insertdbLocal() {
 }
 
 function webService() {
-	if (indexQuantidadeRegisto >= arrQuantRegistro.length) indexQuantidadeRegisto = 0;
+	if (indexQuantidadeRegisto >= arrQuantRegistro.length) {
+		indexQuantidadeRegisto = 0;
+		arrTempoExecucao = new Array();
+	}
 
 	var URI = "http://webapiadrtcc.azurewebsites.net/api/Usuarios/";
 	console.log(URI + (arrQuantRegistro[indexQuantidadeRegisto] - 1));
 	dropTable();
 	createTable();
 
-	TEMPO_INICIO = performance.now();
+	TEMPO_INICIO = Date.now();
 	$.ajax({
 		url: URI + (arrQuantRegistro[indexQuantidadeRegisto] -1),
 		type: 'Get',
@@ -104,7 +110,7 @@ function insert(Usuarios) {
 		console.log('Transaction ERROR: ' + error.message);
 	}, function () {
 		//grava o Tempo no Commit
-		TEMPO_FIM = performance.now();
+		TEMPO_FIM = Date.now();
 		arrTempoExecucao.push(TEMPO_FIM - TEMPO_INICIO);
 		exibeTempo();
 		console.log('Populated database OK');
@@ -112,6 +118,13 @@ function insert(Usuarios) {
 }
 
 function exibeTempo() {
+	var str = "[";
+	for (var i in arrTempoExecucao) {
+		str = str + arrTempoExecucao[i] + ",";
+	}
+	str = str + "]";
+	document.getElementById("lblText").innerHTML = str;
+
 	console.log("Tempo Execução :", (TEMPO_FIM - TEMPO_INICIO), " milliseconds");
 }
 
@@ -122,11 +135,13 @@ const DIMENSAO = {
 
 function multMatriz() {
 	document.getElementById("lblText").innerHTML = 'Teste 3 em execução'
+	arrTempoExecucao = new Array();
+
 	for (var i in DIMENSAO.LEN) {
 		MultiplicarMatriz(DIMENSAO.LEN[i]);
 		arrTempoExecucao.push(TEMPO_FIM - TEMPO_INICIO);
-		console.log("Tempo Execução :", (TEMPO_FIM - TEMPO_INICIO), " milliseconds");
 	}
+	exibeTempo();
 	document.getElementById("lblText").innerHTML = 'Teste Finalizado'
 }
 
@@ -137,8 +152,8 @@ function MultiplicarMatriz(dimensao) {
 	var acumulador;
 	var resultTemp;
 
-	TEMPO_INICIO = performance.now();
-
+	TEMPO_INICIO = Date.now();
+	
 	//Cria á matriz e popula 
 	for (var i = 0; i < dimensao; i++) {
 		matriz1[i] = new Array();
@@ -160,6 +175,6 @@ function MultiplicarMatriz(dimensao) {
 		}
 		matrizResult.push(acumulador);
 	}
-
-	TEMPO_FIM = performance.now();
+	
+	TEMPO_FIM = Date.now();
 }
